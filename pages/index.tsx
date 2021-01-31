@@ -2,11 +2,12 @@ import React from 'react';
 import Link from 'next/link';
 import router from 'next/router';
 
+const examples = ['react', 'vue', '@angular/core', 'typescript', 'webpack'];
+
 function IndexPage() {
   const [name, setName] = React.useState('');
   function handleSubmit(event: any) {
     event.preventDefault();
-    console.log(event);
     router.push(`/package/${name}`);
   }
 
@@ -28,26 +29,13 @@ function IndexPage() {
 
       <h3>Examples</h3>
       <ul>
-        <li>
-          <Link prefetch={false} href="/package/react">
-            React
-          </Link>
-        </li>
-        <li>
-          <Link prefetch={false} href="/package/vue">
-            Vue
-          </Link>
-        </li>
-        <li>
-          <Link prefetch={false} href="/package/@angular/core">
-            @angular/core
-          </Link>
-        </li>
-        <li>
-          <Link prefetch={false} href="/package/typescript">
-            typescript
-          </Link>
-        </li>
+        {examples.map((name) => (
+          <li>
+            <Link prefetch={false} href={`/package/${name}`}>
+              {name}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );

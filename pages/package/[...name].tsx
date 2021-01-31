@@ -55,14 +55,18 @@ function groupByVersion(
   semverVersion: 'major' | 'minor'
 ) {
   return groupBy(Object.entries(versionsDownloads), ([key]) => {
-    const version = semver.parse(key);
-    if (version) {
-      if (semverVersion === 'major') {
-        return version.major;
+    try {
+      const version = semver.parse(key);
+      if (version) {
+        if (semverVersion === 'major') {
+          return version.major;
+        }
+        if (semverVersion === 'minor') {
+          return `${version.major}.${version.minor}`;
+        }
       }
-      if (semverVersion === 'minor') {
-        return `${version.major}.${version.minor}`;
-      }
+    } catch (e) {
+      // pass
     }
 
     return null;
@@ -111,6 +115,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const versionsDownloads: Record<string, number> = context.context.versionsDownloads;
     const majorGroups = groupByVersion(versionsDownloads, 'major');
     const minorGroups = groupByVersion(versionsDownloads, 'minor');
+    delete majorGroups['null']
+    delete minorGroups['null']
 
     const major = totalByVersion(majorGroups);
     const minor = totalByVersion(minorGroups);
