@@ -20,6 +20,15 @@ module.exports = {
           },
         ],
       },
+      {
+        source: '/_next/data/:slug*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'max-age=84600, public',
+          },
+        ],
+      },
     ];
   },
 }
