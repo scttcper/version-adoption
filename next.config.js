@@ -10,6 +10,15 @@ module.exports = {
           },
         ],
       },
+      {
+        source: '/package/:slug*',
+        headers: [
+          {
+            key: 'cache-control',
+            value: 'public, max-age=86400',
+          },
+        ],
+      },
     ];
   },
 }
