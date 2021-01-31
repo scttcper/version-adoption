@@ -101,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
     const name = Array.isArray(params?.name) ? params.name.join('/') : params.name;
 
-    const text = await got.get(`https://www.npmjs.com/package/${name}`).text();
+    const text = await got.get(`https://www.npmjs.com/package/${name.toLowerCase()}`).text();
     const contextObj = /window\.__context__\s?=\s?(?<context>.*)<\/script/.exec(text);
     if (contextObj === null || !contextObj.groups) {
       return { props: { errors: 'failed to get package data object' } };
