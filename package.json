@@ -1,5 +1,6 @@
 {
-  "name": "with-typescript",
+  "name": "version-adoption",
+  "private": true,
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
@@ -23,6 +24,7 @@
     "@types/semver": "7.3.4",
     "typescript": "4.1"
   },
+  "repository": "scttcper/version-adoption",
   "browserslist": [
     ">1%",
     "not ie 11",
