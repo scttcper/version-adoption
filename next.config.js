@@ -6,8 +6,8 @@ module.exports = {
         source: '/:slug*',
         headers: [
           {
-            key: 'cache-control',
-            value: 'public, max-age=86400',
+            key: 'Cache-Control',
+            value: 'max-age=84600, public',
           },
         ],
       },
@@ -15,8 +15,8 @@ module.exports = {
         source: '/package/:slug*',
         headers: [
           {
-            key: 'cache-control',
-            value: 'public, max-age=86400',
+            key: 'Cache-Control',
+            value: 'max-age=84600, public',
           },
         ],
       },
