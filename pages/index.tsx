@@ -30,7 +30,7 @@ function IndexPage() {
       <h3>Examples</h3>
       <ul>
         {examples.map((name) => (
-          <li>
+          <li key={name}>
             <Link prefetch={false} href={`/package/${name}`}>
               {name}
             </Link>
