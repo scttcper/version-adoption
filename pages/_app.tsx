@@ -1,8 +1,9 @@
 import '../styles/index.css';
 
 import Head from 'next/head';
+import {AppProps} from 'next/app';
 
-export default function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -29,3 +30,5 @@ export default function MyApp({ Component, pageProps }) {
     </>
   );
 }
+
+export default MyApp
