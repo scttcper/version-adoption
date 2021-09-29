@@ -125,7 +125,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const majorFiltered = major.filter(filterByPercent(onePercent));
     const minorFiltered = minor.filter(filterByPercent(onePercent));
     return { props: { name, major: majorFiltered, minor: minorFiltered, total } };
-  } catch (err) {
+  } catch (err: any) {
     return { props: { errors: err.message } };
   }
 };
