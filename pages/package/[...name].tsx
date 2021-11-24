@@ -1,11 +1,11 @@
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import got from 'got';
 import groupBy from 'lodash/groupBy';
 import semver from 'semver';
 
 import VersionTable from '../../components/VersionTable';
 import { VersionData } from '../../interfaces/types';
-import Link from 'next/link';
 
 type Props = {
   name?: string;
