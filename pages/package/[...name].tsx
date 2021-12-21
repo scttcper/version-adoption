@@ -105,7 +105,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
     const name = Array.isArray(params?.name) ? params.name.join('/') : params.name;
 
-    const text = await got.get(`https://www.npmjs.com/package/${name.toLowerCase()}`).text();
+    const text = await got
+      .get(`https://www.npmjs.com/package/${name.toLowerCase()}`, {
+        retry: { limit: 0 },
+        timeout: { request: 5000 },
+      })
+      .text();
+
     const contextObj = /window\.__context__\s?=\s?(?<context>.*)<\/script/.exec(text);
     if (contextObj === null || !contextObj.groups) {
       return { props: { errors: 'failed to get package data object' } };
@@ -115,8 +121,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const versionsDownloads: Record<string, number> = context.context.versionsDownloads;
     const majorGroups = groupByVersion(versionsDownloads, 'major');
     const minorGroups = groupByVersion(versionsDownloads, 'minor');
-    delete majorGroups['null']
-    delete minorGroups['null']
+    delete majorGroups['null'];
+    delete minorGroups['null'];
 
     const major = totalByVersion(majorGroups);
     const minor = totalByVersion(minorGroups);
