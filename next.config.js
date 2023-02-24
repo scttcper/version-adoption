@@ -1,6 +1,5 @@
 module.exports = {
   reactStrictMode: true,
-  unstable_runtimeJS: false,
   async headers() {
     return [
       {
@@ -32,4 +31,4 @@ module.exports = {
       },
     ];
   },
-}
+};
