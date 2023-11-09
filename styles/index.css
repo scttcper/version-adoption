@@ -1,16 +1,6 @@
-html {
-  box-sizing: border-box;
-}
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
-body,
-html {
-  font-family: 'IBM Plex Mono', monospace;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
   max-width: 550px;
