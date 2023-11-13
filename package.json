@@ -28,11 +28,12 @@
     "postcss": "^8.4.31",
     "typescript": "5.2"
   },
-  "overrides": {
-    "@sentry/nextjs": {
-      "next": "14.0.3-canary.5"
-    }
-  },
   "repository": "scttcper/version-adoption",
+  "browserslist": [
+    ">1%",
+    "not ie 11",
+    "not dead",
+    "not op_mini all"
+  ],
   "license": "MIT"
 }
