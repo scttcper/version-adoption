@@ -15,7 +15,7 @@ function MyColumn<T extends object>(props: ColumnProps<T>) {
 
 function VersionTable({ data, total }: Props) {
   return (
-    <Table aria-label="Version data" className="mb-5">
+    <Table aria-label="Version data" className="mb-5 tabular-nums">
       <TableHeader
         columns={[{ key: 'version', isRowHeader: true }, { key: 'downloads' }, { key: '% total' }]}
       >
