@@ -17,7 +17,7 @@ function VersionTable({ data, total }: Props) {
   return (
     <Table aria-label="Version data" className="mb-5">
       <TableHeader
-        columns={[{ key: 'version', isRowHeader: true }, { key: 'downloads' }, { key: 'percent' }]}
+        columns={[{ key: 'version', isRowHeader: true }, { key: 'downloads' }, { key: '% total' }]}
       >
         {(column) => (
           <MyColumn isRowHeader={column.isRowHeader} className="py-2 px-3">
