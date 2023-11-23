@@ -4,6 +4,7 @@ import semver from 'semver';
 
 import VersionTable from '../../../components/VersionTable';
 import { VersionData } from '../../../interfaces/types';
+import { IndexForm } from '../../form';
 
 type Props = {
   major: VersionData;
@@ -94,24 +95,24 @@ export default async function PackagePage({ params: { pkg } }: { params: { pkg: 
 
   return (
     <div>
-      <div className="mb-8 mt-8">
+      <div className="mb-12 mt-8">
         <Link href="/" className="text-gray-700 font-semibold">
           Home
         </Link>
+        <IndexForm />
       </div>
 
-      <p className="leading-7 text-lg">
-        <span className="">Package:</span>{' '}
+      <p className="leading-8 text-xl font-bold">
         <a href={`https://npmjs.com/${packageName}`} target="_blank" rel="noopener">
           {decodeURIComponent(packageName)}
         </a>{' '}
       </p>
-      <p className="mb-10 leading-7 text-lg">
+      <p className="mb-10 leading-7">
         <span className="">Downloads last 7 days:</span> {data.total.toLocaleString()} <br />
       </p>
-      <h4 className="text-xl leading-10 mb-3">Major</h4>
+      <h4 className="text-lg leading-10 mb-3">Major</h4>
       <VersionTable data={data.major} total={data.total} />
-      <h4 className="text-xl leading-10 mb-3">Minor</h4>
+      <h4 className="text-lg leading-10 mb-3">Minor</h4>
       <VersionTable data={data.minor} total={data.total} />
 
       <p>
