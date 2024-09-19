@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
-
-import React from 'react';
-import { useSyncExternalStore } from 'react';
+import { useMemo, useSyncExternalStore } from 'react';
 
 interface DateProps {
   dateTs: number;
@@ -32,7 +29,7 @@ const formatDate = (dateTs: number): string => {
 };
 
 export const HydrationSafeDate: React.FC<DateProps> = ({ dateTs: initialDateTs }) => {
-  const dateStore = React.useMemo(() => createDateStore(initialDateTs), []);
+  const dateStore = useMemo(() => createDateStore(initialDateTs), []);
 
   const dateTs = useSyncExternalStore(
     dateStore.subscribe,
