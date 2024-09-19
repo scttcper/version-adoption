@@ -1,1 +1,1 @@
-export type VersionData = Array<[version: string, downloads: number]>
+export type VersionData = Array<[version: string, downloads: number, lastUpdate: number]>;

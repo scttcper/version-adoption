@@ -5,6 +5,7 @@ import semver from 'semver';
 import VersionTable from '../../../components/VersionTable';
 import { VersionData } from '../../../interfaces/types';
 import { IndexForm } from '../../form';
+import { NpmContext } from '../../../interfaces/npmContext';
 
 type Props = {
   major: VersionData;
@@ -12,13 +13,35 @@ type Props = {
   total: number;
 };
 
+interface DownloadsWithDate {
+  version: string;
+  downloads: number;
+  date: number;
+}
+
+function CombineDownloadsAndDates(
+  downloads: Record<string, number>,
+  versions: NpmContext['context']['packument']['versions'],
+): DownloadsWithDate[] {
+  return Object.entries(downloads)
+    .map(([version, downloads]) => {
+      const date = versions.find(v => v.version === version)?.date.ts;
+      return {
+        version,
+        downloads,
+        date: date ?? null,
+      };
+    })
+    .filter((v): v is DownloadsWithDate => v.date !== null);
+}
+
 function groupByVersion(
-  versionsDownloads: Record<string, number>,
-  semverVersion: 'major' | 'minor'
+  downloadsWithDate: DownloadsWithDate[],
+  semverVersion: 'major' | 'minor',
 ) {
-  return groupBy(Object.entries(versionsDownloads), ([key]) => {
+  return groupBy(downloadsWithDate, downloads => {
     try {
-      const version = semver.parse(key);
+      const version = semver.parse(downloads.version);
       if (version) {
         if (semverVersion === 'major') {
           return version.major;
@@ -40,15 +63,23 @@ function toVersion(version: string) {
   return version.split('.').length === 1 ? `${version}.0.0` : `${version}.0`;
 }
 
-function totalByVersion(groups: ReturnType<typeof groupByVersion>) {
+function totalByVersion(groups: ReturnType<typeof groupByVersion>): VersionData {
   return Object.entries(groups)
-    .map(([major, versionResults]) => {
-      return [major, versionResults.reduce((acc, currentValue) => acc + currentValue[1], 0)] as [
-        string,
-        number
+    .map<VersionData[number]>(([major, data]) => {
+      return [
+        major,
+        data.reduce((acc, currentValue) => acc + currentValue.downloads, 0),
+        data.reduce((acc, currentValue) => {
+          if (currentValue.date > acc) {
+            return currentValue.date;
+          }
+          return acc;
+        }, 0),
       ];
     })
-    .sort(([versionA], [versionB]) => semver.compareLoose(toVersion(versionA), toVersion(versionB)))
+    .sort(([versionA], [versionB]) =>
+      semver.compareLoose(toVersion(versionA), toVersion(versionB)),
+    )
     .reverse();
 }
 
@@ -65,10 +96,16 @@ async function getData(pkg: string): Promise<Props> {
     throw new Error('failed to get package data object');
   }
   // Bad at regex
-  const context = JSON.parse(contextObj.groups.context.split('</script>')[0]);
-  const versionsDownloads: Record<string, number> = context.context.versionsDownloads;
-  const majorGroups = groupByVersion(versionsDownloads, 'major');
-  const minorGroups = groupByVersion(versionsDownloads, 'minor');
+  const context = JSON.parse(
+    contextObj.groups.context.split('</script>')[0],
+  ) as NpmContext;
+  // Downloads are stored as a record of version -> downloads
+  const versionsDownloads = context.context.versionsDownloads;
+  // Versions have the date in the packument
+  const versions = context.context.packument.versions;
+  const versionsDownloadsAndDates = CombineDownloadsAndDates(versionsDownloads, versions);
+  const majorGroups = groupByVersion(versionsDownloadsAndDates, 'major');
+  const minorGroups = groupByVersion(versionsDownloadsAndDates, 'minor');
   delete majorGroups['null'];
   delete minorGroups['null'];
 
@@ -81,7 +118,11 @@ async function getData(pkg: string): Promise<Props> {
   return { major: majorFiltered, minor: minorFiltered, total };
 }
 
-export default async function PackagePage({ params: { pkg } }: { params: { pkg: string } }) {
+export default async function PackagePage({
+  params: { pkg },
+}: {
+  params: { pkg: string };
+}) {
   if (!pkg) {
     throw new Error('Package name required');
   }
@@ -108,7 +149,8 @@ export default async function PackagePage({ params: { pkg } }: { params: { pkg: 
         </a>{' '}
       </p>
       <p className="mb-10 leading-7">
-        <span className="">Downloads last 7 days:</span> {data.total.toLocaleString()} <br />
+        <span className="">Downloads last 7 days:</span> {data.total.toLocaleString()}{' '}
+        <br />
       </p>
       <h4 className="text-lg leading-10 mb-3">Major</h4>
       <VersionTable data={data.major} total={data.total} />
@@ -117,8 +159,8 @@ export default async function PackagePage({ params: { pkg } }: { params: { pkg: 
 
       <p>
         <small>
-          Downloads are from the last 7 days. Versions with less than 1% total downloads are not
-          listed.
+          Downloads are from the last 7 days. Versions with less than 1% total downloads
+          are not listed.
         </small>
       </p>
     </div>

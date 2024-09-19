@@ -24,8 +24,8 @@ export default function Layout() {
 
       <p>
         <small>
-          Downloads are from the last 7 days. Versions with less than 1% total downloads are not
-          listed.
+          Downloads are from the last 7 days. Versions with less than 1% total downloads
+          are not listed.
         </small>
       </p>
     </div>
