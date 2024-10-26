@@ -29,6 +29,7 @@ const formatDate = (dateTs: number): string => {
 };
 
 export const HydrationSafeDate: React.FC<DateProps> = ({ dateTs: initialDateTs }) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dateStore = useMemo(() => createDateStore(initialDateTs), []);
 
   const dateTs = useSyncExternalStore(

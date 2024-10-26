@@ -50,7 +50,7 @@ function groupByVersion(
           return `${version.major}.${version.minor}`;
         }
       }
-    } catch (e) {
+    } catch {
       // pass
     }
 
@@ -84,11 +84,15 @@ function totalByVersion(groups: ReturnType<typeof groupByVersion>): VersionData 
 }
 
 function filterByPercent(percent: number): (data: VersionData[0]) => boolean {
-  return ([_, downloads]) => downloads > percent;
+  return ([, downloads]) => downloads > percent;
 }
 
 async function getData(pkg: string): Promise<Props> {
-  const request = await fetch(`https://www.npmjs.com/package/${pkg.toLowerCase()}`);
+  const request = await fetch(`https://www.npmjs.com/package/${pkg.toLowerCase()}`, {
+    next: {
+      revalidate: 60 * 60 * 24, // 24 hours
+    },
+  });
   const text = await request.text();
 
   const contextObj = /window\.__context__\s?=\s?(?<context>.*)<\/script/.exec(text);
@@ -119,10 +123,11 @@ async function getData(pkg: string): Promise<Props> {
 }
 
 export default async function PackagePage({
-  params: { pkg },
+  params,
 }: {
-  params: { pkg: string };
+  params: Promise<{ pkg: string }>
 }) {
+  const { pkg } = await params;
   if (!pkg) {
     throw new Error('Package name required');
   }
