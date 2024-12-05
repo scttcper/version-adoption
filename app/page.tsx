@@ -29,7 +29,7 @@ export default function IndexPage() {
             <Link
               prefetch={false}
               href={`/package/${name}`}
-              className="text-blue-600 hover:text-blue-600 focus:text-blue-800 visited:text-indigo-600 underline underline-offset-2"
+              className="text-slate-600 hover:text-slate-600 focus:text-slate-800 visited:text-neutral-600 underline underline-offset-2"
             >
               {name}
             </Link>
