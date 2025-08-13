@@ -6,6 +6,7 @@ import VersionTable from '../../../components/VersionTable';
 import { VersionData } from '../../../interfaces/types';
 import { IndexForm } from '../../form';
 import { NpmContext } from '../../../interfaces/npmContext';
+import GitHubLink from '../../../components/GitHubLink';
 
 type Props = {
   major: VersionData;
@@ -142,9 +143,12 @@ export default async function PackagePage({
   return (
     <div>
       <div className="mb-12 mt-8">
-        <Link href="/" className="text-gray-700 font-semibold">
-          Home
-        </Link>
+        <div className="flex items-center justify-between mb-8">
+          <Link href="/" className="text-gray-700 font-semibold">
+            Home
+          </Link>
+          <GitHubLink />
+        </div>
         <IndexForm />
       </div>
 
