@@ -16,7 +16,6 @@ function VersionTable({ data, total }: Props) {
   const maxPercent = total > 0 && data.length
     ? Math.max(...data.map(([, downloads]) => downloads / total))
     : 0;
-    console.log({maxPercent})
   
   // Helper function to get background opacity (0-0.15 scale)
   const getOpacity = (value: number, max: number) => {
